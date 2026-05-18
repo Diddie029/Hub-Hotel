@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Restaurant Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+        }
+
+        /* Left side - Info */
+        .login-info {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .login-info h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .login-info p {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .login-info-features {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Right side - Form */
+        .login-form-container {
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form-container h3 {
+            font-size: 24px;
+            color: #000;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .login-form-container p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #27ae60;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .remember-forgot a {
+            color: #27ae60;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+
+        .remember-forgot input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #27ae60;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(39, 174, 96, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-to-home {
+            text-align: center;
+        }
+
+        .back-to-home a {
+            color: #27ae60;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-to-home a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #ffe5e5;
+            color: #c0392b;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid #c0392b;
+            font-size: 14px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #e5f4ed;
+            color: #229954;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid #229954;
+            font-size: 14px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .login-info {
+                padding: 40px 30px;
+                min-height: auto;
+            }
+
+            .login-form-container {
+                padding: 40px 30px;
+            }
+
+            .login-info h2 {
+                font-size: 22px;
+            }
+
+            .login-form-container h3 {
+                font-size: 20px;
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            margin: 0 2px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: loading 1.4s infinite;
+        }
+
+        @keyframes loading {
+            0%, 80%, 100% {
+                opacity: 0.5;
+            }
+            40% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left side - Info -->
+        <div class="login-info">
+            <h2>Admin Portal</h2>
+            <p>Secure access to restaurant management system</p>
+            
+            <div class="login-info-features">
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <span>Real-time Dashboard</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🤖</div>
+                    <span>Robot Management</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🍽️</div>
+                    <span>Order Control</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📈</div>
+                    <span>System Analytics</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side - Form -->
+        <div class="login-form-container">
+            <h3>Login</h3>
+            <p>Enter your credentials to continue</p>
+
+            <div class="error-message" id="errorMsg"></div>
+            <div class="success-message" id="successMsg"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <div class="remember-forgot">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" onclick="handleForgotPassword(event)">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">Login to Dashboard</button>
+
+                <div class="back-to-home">
+                    <a href="index.html">← Back to Home</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Demo credentials for testing
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'admin123';
+        
+        // Session key
+        const SESSION_KEY = 'admin_session_token';
+        const REMEMBER_KEY = 'admin_remember_me';
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Clear messages
+            hideError();
+            hideSuccess();
+
+            // Validation
+            if (!username || !password) {
+                showError('Please enter both username and password');
+                return;
+            }
+
+            // Disable button and show loading
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = 'Logging in<span class="loading"></span>';
+
+            // Simulate API call with timeout
+            setTimeout(() => {
+                if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                    // Create session token
+                    const sessionToken = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    
+                    // Store session
+                    sessionStorage.setItem(SESSION_KEY, sessionToken);
+                    
+                    // Store remember me
+                    if (rememberMe) {
+                        localStorage.setItem(REMEMBER_KEY, 'true');
+                        localStorage.setItem('admin_username', username);
+                    }
+
+                    showSuccess('Login successful! Redirecting...');
+                    
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
+                    }, 800);
+                } else {
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = 'Login to Dashboard';
+                    showError('Invalid username or password');
+                }
+            }, 1000);
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        function hideError() {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.classList.remove('show');
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMsg');
+            successDiv.textContent = message;
+            successDiv.classList.add('show');
+        }
+
+        function hideSuccess() {
+            const successDiv = document.getElementById('successMsg');
+            successDiv.classList.remove('show');
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            alert('For demo purposes:\nUsername: admin\nPassword: admin123\n\nIn production, implement password reset via email.');
+        }
+
+        // Check if user should be remembered
+        window.addEventListener('load', function() {
+            if (localStorage.getItem(REMEMBER_KEY) === 'true') {
+                const savedUsername = localStorage.getItem('admin_username');
+                if (savedUsername) {
+                    document.getElementById('username').value = savedUsername;
+                    document.getElementById('rememberMe').checked = true;
+                    document.getElementById('password').focus();
+                }
+            }
+        });
+
+        // Check if already logged in
+        if (sessionStorage.getItem(SESSION_KEY)) {
+            window.location.href = 'admin-dashboard.html';
+        }
+    </script>
+</body>
+</html>

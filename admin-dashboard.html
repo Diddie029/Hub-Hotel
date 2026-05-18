@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Restaurant Management</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: #f5f7fa;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border: none;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item.active {
+            background: #27ae60;
+            border-left-color: #f39c12;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 20px 0;
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: auto;
+            text-align: center;
+            font-size: 13px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 30px;
+            padding-top: 20px;
+        }
+
+        .user-info button {
+            background: #c0392b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 12px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .content-header h1 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 28px;
+        }
+
+        .content-header-subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid #27ae60;
+        }
+
+        .stat-card.blue {
+            border-left-color: #3498db;
+        }
+
+        .stat-card.orange {
+            border-left-color: #f39c12;
+        }
+
+        .stat-card.red {
+            border-left-color: #e74c3c;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        /* Content Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .data-table thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .data-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #2980b9;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #27ae60;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        /* Buttons */
+        .btn-success {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        /* Status Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .badge-warning {
+            background: #ffeaa7;
+            color: #f39c12;
+        }
+
+        .badge-danger {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+
+        .badge-info {
+            background: #d6eaf8;
+            color: #3498db;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-dialog {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                min-height: auto;
+                padding: 15px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .log-entry {
+            padding: 12px;
+            border-left: 3px solid #ecf0f1;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .log-entry.success {
+            border-left-color: #27ae60;
+        }
+
+        .log-entry.warning {
+            border-left-color: #f39c12;
+        }
+
+        .log-entry.error {
+            border-left-color: #e74c3c;
+        }
+
+        .log-time {
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        .log-message {
+            margin-top: 5px;
+            color: #2c3e50;
+        }
+
+        /* Robot Animation Styles */
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes slide {
+            0% {
+                transform: translateX(-40%);
+            }
+            50% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(40%);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .menu-image {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .menu-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-image.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            background: linear-gradient(135deg, #f5f7fa, #ecf0f1);
+            color: #bdc3c7;
+        }
+
+        .menu-content {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .menu-category {
+            font-size: 12px;
+            color: #7f8c8d;
+            background: #ecf0f1;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+
+        .menu-desc {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 10px;
+            flex-grow: 1;
+        }
+
+        .menu-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        .menu-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .menu-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .action-btn.delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">🍽️ Admin</div>
+        <div class="sidebar-nav">
+            <button class="nav-item active" onclick="showSection('dashboard')">📊 Dashboard</button>
+            <button class="nav-item" onclick="showSection('orders')">📦 Orders</button>
+            <button class="nav-item" onclick="showSection('robots')">🤖 Robots</button>
+            <button class="nav-item" onclick="showSection('tables')">🪑 Tables</button>
+            <button class="nav-item" onclick="showSection('menu')">🍴 Menu</button>
+            <button class="nav-item" onclick="showSection('reviews')">⭐ Reviews</button>
+            <button class="nav-item" onclick="showSection('system')">⚙️ System</button>
+        </div>
+        <div class="sidebar-divider"></div>
+        <div class="user-info">
+            <div>👤 Admin User</div>
+            <div style="font-size: 12px; margin-top: 8px;">Logged In</div>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section active">
+            <div class="content-header">
+                <div>
+                    <h1>Dashboard</h1>
+                    <div class="content-header-subtitle">Real-time system overview</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="activeOrdersCount">0</div>
+                    <div class="stat-label">📦 Active Orders</div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-value" id="activeRobotsCount">0</div>
+                    <div class="stat-label">🤖 Active Robots</div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-value" id="totalTablesCount">0</div>
+                    <div class="stat-label">🪑 Tables</div>
+                </div>
+                <div class="stat-card red">
+                    <div class="stat-value" id="totalRevenueCount">KES 0</div>
+                    <div class="stat-label">💰 Total Revenue</div>
+                </div>
+            </div>
+
+            <!-- Robot Live Simulation -->
+            <div class="section-card">
+                <div class="section-title">🤖 Live Robot Monitoring</div>
+                <div id="robotsMonitoringContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                    <!-- Robots loaded dynamically -->
+                    <p style="text-align: center; color: #7f8c8d; grid-column: 1 / -1;">Loading robots...</p>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📊 Recent Orders</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Table</th>
+                            <th>Items</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentOrdersBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: #7f8c8d;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="orders" class="section">
+            <div class="content-header">
+                <div>
+                    <h1>Orders Management</h1>
+                    <div class="content-header-subtitle">View and manage all orders</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📦 All Orders</div>
+                <div style="margin-bottom: 15px;">
+                    <label>Filter by Status:</label>
+                    <select id="orderStatusFilter" style="padding: 8px; margin-left: 10px;">
+                        <option value="">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Cooking">Cooking</option>
+                        <option value="Ready">Ready</option>
+                        <option value="Delivering">Delivering</option>
+                        <option value="Delivered">Delivered</option>
+                    </select>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Table</th>
+                            <th>Customer</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                            <th>Robot</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersBody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #7f8c8d;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Robots Section -->
+        <div id="robots" class="section">
+            <div class="content-header">
+                <div>
+                    <h1>Robot Management</h1>
+                    <div class="content-header-subtitle">Manage robot fleet and assignments</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">➕ Add New Robot</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Robot ID:</label>
+                        <input type="text" id="robotId" placeholder="e.g., ROBOT-005">
+                    </div>
+                </div>
+                <button class="btn-success" onclick="addRobot()">Add Robot</button>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">🤖 Robot Fleet</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Robot ID</th>
+                            <th>Status</th>
+                            <th>Battery</th>
+                            <th>Current Task</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="robotsBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #7f8c8d;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tables Section -->
+        <div id="tables" class="section">
+            <div class="content-header">
+                <div>
+                    <h1>Table Monitors</h1>
+                    <div class="content-header-subtitle">Manage dining table kiosks</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">➕ Add Table Monitor</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Table ID:</label>
+                        <input type="text" id="tableId" placeholder="e.g., T007">
+                    </div>
+                    <div class="form-group">
+                        <label>Location:</label>
+                        <input type="text" id="tableLocation" placeholder="e.g., Near Window">
+                    </div>
+                </div>
+                <button class="btn-success" onclick="addTable()">Add Table</button>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">🪑 Tables List</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Table ID</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablesBody">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #7f8c8d;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Menu Section -->
+        <div id="menu" class="section">
+            <div class="content-header">
+                <div>
+                    <h1>Menu Management</h1>
+                    <div class="content-header-subtitle">Add and manage menu items</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">➕ Add Menu Item</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Item Name:</label>
+                        <input type="text" id="menuName" placeholder="e.g., Nyama Choma">
+                    </div>
+                    <div class="form-group">
+                        <label>Category:</label>
+                        <select id="menuCategory">
+                            <option value="Appetizers">Appetizers</option>
+                            <option value="Mains">Mains</option>
+                            <option value="Sides">Sides</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Desserts">Desserts</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (KES):</label>
+                        <input type="number" id="menuPrice" placeholder="e.g., 500">
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <input type="text" id="menuDesc" placeholder="Brief description">
+                    </div>
+                    <div class="form-group">
+                        <label>Meal Picture:</label>
+                        <input type="file" id="menuImage" accept="image/*" placeholder="Upload meal image">
+                        <div id="imagePreview" style="margin-top: 10px;"></div>
+                    </div>
+                </div>
+                <button class="btn-success" onclick="addMenuItem()">Add Item</button>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">🍴 Menu Items</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;" id="menuGrid">
+                    <div style="grid-column: 1 / -1; text-align: center; color: #7f8c8d; padding: 40px;">Loading menu items...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div id="reviews" class="section">
+            <div class="content-header">
+                <div>
+                    <h1>Customer Reviews</h1>
+                    <div class="content-header-subtitle">View customer feedback and ratings</div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">⭐ Recent Reviews</div>
+                <div id="reviewsContainer">
+                    <p style="text-align: center; color: #7f8c8d;">Loading reviews...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Section -->
+        <div id="system" class="section">
+            <div class="content-header">
+                <div>
+                    <h1>System Monitor</h1>
+                    <div class="content-header-subtitle">System health and activity logs</div>
+                </div>
+                <button class="btn-success" onclick="checkSystemHealth()">🔄 Check Health</button>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📊 System Health</div>
+                <div id="healthStatus">
+                    <p style="text-align: center; color: #7f8c8d;">Loading...</p>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">📋 Activity Logs</div>
+                <div style="margin-bottom: 15px;">
+                    <label>Filter by Type:</label>
+                    <select id="logTypeFilter" style="padding: 8px; margin-left: 10px;">
+                        <option value="">All Types</option>
+                        <option value="order">Orders</option>
+                        <option value="robot">Robots</option>
+                        <option value="menu">Menu</option>
+                        <option value="payment">Payments</option>
+                    </select>
+                </div>
+                <div id="logsContainer" style="max-height: 500px; overflow-y: auto;">
+                    <p style="text-align: center; color: #7f8c8d;">Loading logs...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Real-time update intervals
+        let dashboardRefreshInterval;
+        let ordersRefreshInterval;
+        let robotsRefreshInterval;
+        let systemHealthRefreshInterval;
+        
+        // Check authentication on load
+        window.addEventListener('load', function() {
+            if (!sessionStorage.getItem('admin_session_token')) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            loadDashboardData();
+            loadOrders();
+            loadRobots();
+            loadTables();
+            loadMenu();
+            loadReviews();
+            loadSystemInfo();
+            
+            // Real-time updates for dashboard (every 2 seconds)
+            dashboardRefreshInterval = setInterval(() => {
+                loadDashboardData();
+            }, 2000);
+            
+            // Real-time updates for orders (every 3 seconds)
+            ordersRefreshInterval = setInterval(() => {
+                loadOrders();
+            }, 3000);
+            
+            // Real-time updates for robots (every 3 seconds)
+            robotsRefreshInterval = setInterval(() => {
+                loadRobots();
+            }, 3000);
+            
+            // Real-time updates for system health (every 5 seconds)
+            systemHealthRefreshInterval = setInterval(() => {
+                loadSystemInfo();
+            }, 5000);
+        });
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Reload data for the section
+            if (sectionId === 'dashboard') loadDashboardData();
+            else if (sectionId === 'orders') loadOrders();
+            else if (sectionId === 'robots') loadRobots();
+            else if (sectionId === 'tables') loadTables();
+            else if (sectionId === 'menu') loadMenu();
+            else if (sectionId === 'reviews') loadReviews();
+            else if (sectionId === 'system') loadSystemInfo();
+        }
+
+        async function loadDashboardData() {
+            const result = await apiCall('system.php?action=get_dashboard_summary');
+            if (result.success) {
+                document.getElementById('activeOrdersCount').textContent = result.active_orders || 0;
+                document.getElementById('activeRobotsCount').textContent = result.active_robots || 0;
+                document.getElementById('totalTablesCount').textContent = result.total_tables || 0;
+                document.getElementById('totalRevenueCount').textContent = formatCurrency(result.total_revenue || 0);
+                
+                if (result.recent_orders) {
+                    let html = '';
+                    result.recent_orders.slice(0, 5).forEach(order => {
+                        html += `
+                            <tr>
+                                <td>#${order.order_number}</td>
+                                <td>${order.table_id}</td>
+                                <td>${order.item_count || 1} items</td>
+                                <td><span class="badge badge-info">${order.status}</span></td>
+                                <td>${formatCurrency(order.total_amount)}</td>
+                                <td style="font-size: 12px;">${new Date(order.created_at).toLocaleTimeString()}</td>
+                            </tr>
+                        `;
+                    });
+                    document.getElementById('recentOrdersBody').innerHTML = html;
+                }
+            }
+        }
+
+        async function loadOrders() {
+            const result = await apiCall('orders.php?action=get_orders');
+            if (result.success && result.orders) {
+                let html = '';
+                result.orders.forEach(order => {
+                    // Get customer name from order data
+                    let customerInfo = 'N/A';
+                    if (order.customer_id) {
+                        // Try to get customer name from the order data if available
+                        customerInfo = order.customer_name || order.customer_phone || 'Customer #' + order.customer_id;
+                    }
+                    
+                    // Get assigned robot name
+                    const robotName = order.assigned_robot || '-';
+                    
+                    html += `
+                        <tr>
+                            <td>#${order.order_number}</td>
+                            <td>${order.table_id}</td>
+                            <td>${customerInfo}</td>
+                            <td><span class="badge badge-info">${order.status}</span></td>
+                            <td>${formatCurrency(order.total_amount)}</td>
+                            <td>${robotName}</td>
+                            <td>
+                                <button class="action-btn delete-btn" onclick="deleteOrder(${order.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('ordersBody').innerHTML = html;
+            }
+        }
+
+        async function loadRobots() {
+            const result = await apiCall('robots.php?action=get_robots_with_assignments');
+            if (result.success && result.robots) {
+                // Update robot monitoring display
+                updateRobotMonitoring(result.robots);
+                
+                // Update robot fleet table
+                let html = '';
+                result.robots.forEach(robot => {
+                    const statusEmoji = {
+                        'Idle': '😴',
+                        'Moving': '🚀',
+                        'Delivering': '🎯',
+                        'Charging': '🔋',
+                        'Out of Service': '⚠️'
+                    }[robot.status] || '🤖';
+                    
+                    const statusColor = {
+                        'Idle': 'success',
+                        'Moving': 'info',
+                        'Delivering': 'warning',
+                        'Charging': 'warning',
+                        'Out of Service': 'danger'
+                    }[robot.status] || 'secondary';
+
+                    const powerStatus = robot.is_powered ? 'ON' : 'OFF';
+                    const powerButtonColor = robot.is_powered ? '#27ae60' : '#95a5a6';
+                    const powerButtonText = robot.is_powered ? '⚡ ON' : '⭕ OFF';
+                    
+                    // Show assignment info
+                    let assignmentInfo = '';
+                    if (robot.current_task && robot.order_number) {
+                        assignmentInfo = `<span style="background: #e8f8f5; color: #27ae60; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px;">📦 Order #${robot.order_number}</span>`;
+                        if (robot.order_status) {
+                            assignmentInfo += `<br><small style="color: #7f8c8d;">Status: ${robot.order_status}</small>`;
+                        }
+                        if (robot.table_id) {
+                            assignmentInfo += `<br><small style="color: #7f8c8d;">Table: ${robot.table_id}</small>`;
+                        }
+                    } else {
+                        assignmentInfo = '<span style="color: #7f8c8d;">🔄 Available</span>';
+                    }
+                    
+                    html += `
+                        <tr style="border-left: 4px solid ${powerButtonColor};">
+                            <td style="font-weight: 600; font-size: 16px;">🤖 ${robot.robot_id}</td>
+                            <td><span class="badge badge-${statusColor}" style="font-size: 13px;">${statusEmoji} ${robot.status}</span></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <div style="width: 100px; height: 8px; background: #ecf0f1; border-radius: 4px; overflow: hidden;">
+                                        <div style="width: ${robot.battery_level}%; height: 100%; background: ${robot.battery_level > 50 ? '#27ae60' : robot.battery_level > 20 ? '#f39c12' : '#e74c3c'}; transition: width 0.3s;"></div>
+                                    </div>
+                                    <span style="font-weight: 600;">${robot.battery_level}%</span>
+                                </div>
+                            </td>
+                            <td>${assignmentInfo}</td>
+                            <td>
+                                <button class="power-btn" id="power-${robot.id}" onclick="toggleRobotPower(${robot.id}, ${!robot.is_powered})" style="background: ${powerButtonColor}; color: white; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; transition: all 0.3s ease; margin-right: 5px;">${powerButtonText}</button>
+                                <button class="action-btn delete-btn" onclick="deleteRobot(${robot.id})" style="font-size: 12px;">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('robotsBody').innerHTML = html;
+            }
+        }
+
+        // Update robot monitoring display dynamically
+        function updateRobotMonitoring(robots) {
+            const container = document.getElementById('robotsMonitoringContainer');
+            if (!container) return;
+
+            let html = '';
+            robots.forEach(robot => {
+                // Determine status emoji and colors
+                let statusEmoji = '😴';
+                let statusText = 'Idle';
+                let statusColor = '#27ae60';
+                let isAnimated = false;
+                let animationClass = '';
+
+                if (robot.status === 'Delivering') {
+                    statusEmoji = '🎯';
+                    statusText = 'Delivering';
+                    statusColor = '#f39c12';
+                    isAnimated = true;
+                    animationClass = 'robot-moving';
+                } else if (robot.status === 'Moving') {
+                    statusEmoji = '🚀';
+                    statusText = 'Moving';
+                    statusColor = '#3498db';
+                    isAnimated = true;
+                    animationClass = 'robot-moving';
+                } else if (robot.status === 'Charging') {
+                    statusEmoji = '🔋';
+                    statusText = 'Charging';
+                    statusColor = '#e74c3c';
+                } else if (robot.status === 'Out of Service') {
+                    statusEmoji = '⚠️';
+                    statusText = 'Out of Service';
+                    statusColor = '#95a5a6';
+                }
+
+                // Get assignment info
+                const hasAssignment = robot.current_task && robot.order_number;
+                const assignmentText = hasAssignment ? `Order #${robot.order_number}` : 'Available';
+                const assignmentTable = hasAssignment && robot.table_id ? `Table ${robot.table_id}` : '';
+
+                const borderColor = statusColor;
+
+                html += `
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 2px solid ${borderColor}; text-align: center;">
+                        <div style="font-size: 60px; margin: 10px 0; ${isAnimated ? `animation: slide 3s infinite;` : ''}">${statusEmoji}</div>
+                        <div style="font-weight: bold; margin-bottom: 10px;">${robot.robot_id}</div>
+                        <div style="color: ${statusColor}; font-weight: bold; margin-bottom: 10px;">
+                            ${statusEmoji === '😴' ? '✓' : statusEmoji === '🎯' ? '⟳' : statusEmoji === '🚀' ? '→' : statusEmoji === '🔋' ? '' : '⚠️'} ${statusText}
+                        </div>
+                        <div style="font-size: 12px; color: #555; margin-bottom: 10px;">
+                            ${hasAssignment ? assignmentText : 'Idle - Ready for orders'}
+                            ${assignmentTable ? `<br>${assignmentTable}` : ''}
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #ddd; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
+                            <div style="width: ${robot.battery_level}%; height: 100%; background: linear-gradient(90deg, ${statusColor === '#e74c3c' ? '#c0392b' : statusColor === '#f39c12' ? '#f1c40f' : '#2ecc71'}, ${statusColor}); transition: width 0.5s; border-radius: 4px;"></div>
+                        </div>
+                        <div style="font-size: 11px; color: #7f8c8d;">Battery: <strong>${robot.battery_level}%</strong></div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        async function loadTables() {
+            const result = await apiCall('tables.php?action=get_tables');
+            if (result.success && result.tables) {
+                let html = '';
+                result.tables.forEach(table => {
+                    html += `
+                        <tr>
+                            <td>${table.table_id}</td>
+                            <td>${table.location_name}</td>
+                            <td><span class="badge badge-success">${table.status}</span></td>
+                            <td>
+                                <button class="action-btn delete-btn" onclick="deleteTable(${table.table_id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('tablesBody').innerHTML = html;
+            }
+        }
+
+        async function loadMenu() {
+            const result = await apiCall('menu.php?action=get_menu');
+            if (result.success && result.menu) {
+                let html = '';
+                result.menu.forEach(item => {
+                    const imageUrl = item.image_url ? `assets/meals/${item.image_url}` : '';
+                    html += `
+                        <div class="menu-card">
+                            <div class="menu-image ${imageUrl ? '' : 'no-image'}">
+                                ${imageUrl ? `<img src="${imageUrl}" alt="${item.name}" onerror="this.parentElement.innerHTML='🍴'">` : '🍴'}
+                            </div>
+                            <div class="menu-content">
+                                <div class="menu-name">${item.name}</div>
+                                <div class="menu-category">${item.category}</div>
+                                <div class="menu-desc">${item.description || 'Delicious meal'}</div>
+                                <div class="menu-price">KES ${item.price}</div>
+                                <div class="menu-actions">
+                                    <button class="action-btn delete-btn" onclick="deleteMenuItem(${item.id})">🗑️ Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('menuGrid').innerHTML = html || '<div style="grid-column: 1 / -1; text-align: center; color: #7f8c8d; padding: 40px;">No menu items yet</div>';
+            }
+        }
+
+        async function loadReviews() {
+            const result = await apiCall('reviews.php?action=get_reviews');
+            if (result.success && result.reviews) {
+                let html = '';
+                result.reviews.forEach(review => {
+                    html += `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div>
+                                    <strong>Order #${review.order_id}</strong>
+                                    <div style="color: #f39c12; font-size: 16px;">
+                                        ${'⭐'.repeat(review.rating)}
+                                    </div>
+                                </div>
+                                <div style="font-size: 12px; color: #7f8c8d;">Just now</div>
+                            </div>
+                            <div style="color: #2c3e50; margin-bottom: 10px;">"${review.comment}"</div>
+                        </div>
+                    `;
+                });
+                document.getElementById('reviewsContainer').innerHTML = html || '<p style="text-align: center; color: #7f8c8d;">No reviews yet</p>';
+            }
+        }
+
+        async function loadSystemInfo() {
+            const result = await apiCall('system.php?action=get_system_health');
+            if (result.success) {
+                // Overall health status
+                const overallStatus = result.overall_status || 'Healthy';
+                const statusColor = result.status_color || '#27ae60';
+                const statusEmoji = {
+                    'Healthy': '🟢',
+                    'Warning': '🟡',
+                    'Critical': '🔴'
+                }[overallStatus] || '🟢';
+                
+                let html = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                        
+                        <!-- Overall Health Status -->
+                        <div style="background: linear-gradient(135deg, ${statusColor} 0%, ${statusColor}dd 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <div style="font-size: 40px; margin-bottom: 10px;">${statusEmoji}</div>
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Overall Health Status</div>
+                            <div style="font-size: 24px; font-weight: bold;">${overallStatus}</div>
+                        </div>
+                        
+                        <!-- Last Restart Time -->
+                        <div style="background: linear-gradient(135deg, #3498db 0%, #3498dbdd 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <div style="font-size: 24px; margin-bottom: 10px;">🔄</div>
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Last Restart Time</div>
+                            <div style="font-size: 16px; font-weight: bold;">${new Date(result.last_restart).toLocaleString()}</div>
+                        </div>
+                        
+                        <!-- Server Online Status -->
+                        <div style="background: linear-gradient(135deg, #9b59b6 0%, #9b59b6dd 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <div style="font-size: 24px; margin-bottom: 10px;">🖥️</div>
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Server Status</div>
+                            <div style="font-size: 16px; font-weight: bold;">${result.server_online ? '✅ Online' : '❌ Offline'}</div>
+                            <div style="font-size: 12px; opacity: 0.8; margin-top: 8px;">Database: ${result.database_status}</div>
+                        </div>
+                        
+                        <!-- Sensor Status -->
+                        <div style="background: linear-gradient(135deg, #1abc9c 0%, #1abc9cdd 100%); color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <div style="font-size: 24px; margin-bottom: 10px;">📡</div>
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Sensor Status</div>
+                            <div style="font-size: 16px; font-weight: bold;">${result.sensor_status.includes('Working') ? '✅ Working' : '⚠️ ' + result.sensor_status}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detailed Metrics -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                        <h3 style="margin-top: 0; color: #2c3e50; margin-bottom: 20px;">📊 System Metrics</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #27ae60;">
+                                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 5px;">Active Orders</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #27ae60;">${result.system_metrics.active_orders}</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #3498db;">
+                                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 5px;">Active Robots</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #3498db;">${result.system_metrics.active_robots} / ${result.system_metrics.total_robots}</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #f39c12;">
+                                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 5px;">Robots Charging</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #f39c12;">${result.system_metrics.robots_charging}</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #e74c3c;">
+                                <div style="color: #7f8c8d; font-size: 12px; margin-bottom: 5px;">Offline Robots</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #e74c3c;">${result.system_metrics.robots_out_of_service}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('healthStatus').innerHTML = html;
+            }
+
+            const logs = await apiCall('system.php?action=get_logs');
+            if (logs.success && logs.logs) {
+                let html = '';
+                logs.logs.slice(0, 20).forEach(log => {
+                    html += `
+                        <div class="log-entry ${log.status}">
+                            <div class="log-time">${new Date(log.timestamp || Date.now()).toLocaleTimeString()}</div>
+                            <div class="log-message">${log.action}: ${log.details}</div>
+                        </div>
+                    `;
+                });
+                document.getElementById('logsContainer').innerHTML = html;
+            }
+        }
+
+        async function addRobot() {
+            const robotId = document.getElementById('robotId').value.trim();
+            if (!robotId) {
+                showAlert('Enter robot ID', 'warning');
+                return;
+            }
+
+            const result = await apiCall('robots.php', 'POST', {
+                action: 'add_robot',
+                robot_id: robotId
+            });
+
+            if (result.success) {
+                showAlert('Robot added!', 'success');
+                document.getElementById('robotId').value = '';
+                loadRobots();
+            }
+        }
+
+        async function toggleRobotPower(robotId, powerOn) {
+            const result = await apiCall('robots.php', 'POST', {
+                action: 'toggle_power',
+                robot_id: robotId,
+                is_powered: powerOn ? 1 : 0
+            });
+
+            if (result.success) {
+                const statusText = powerOn ? 'turned ON' : 'turned OFF';
+                showAlert(`Robot ${statusText}!`, 'success');
+                
+                // Update button immediately
+                const btn = document.getElementById(`power-${robotId}`);
+                if (btn) {
+                    btn.style.background = powerOn ? '#27ae60' : '#95a5a6';
+                    btn.textContent = powerOn ? '⚡ ON' : '⭕ OFF';
+                }
+                
+                // Reload robots to sync all data
+                setTimeout(() => loadRobots(), 500);
+            } else {
+                showAlert('Failed to toggle robot power', 'error');
+            }
+        }
+
+        async function addTable() {
+            const tableId = document.getElementById('tableId').value.trim();
+            const location = document.getElementById('tableLocation').value.trim();
+            
+            if (!tableId || !location) {
+                showAlert('Fill all fields', 'warning');
+                return;
+            }
+
+            const result = await apiCall('tables.php', 'POST', {
+                action: 'add_table',
+                table_id: tableId,
+                location_name: location
+            });
+
+            if (result.success) {
+                showAlert('Table added!', 'success');
+                document.getElementById('tableId').value = '';
+                document.getElementById('tableLocation').value = '';
+                loadTables();
+            }
+        }
+
+        // Image preview
+        document.getElementById('menuImage')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const previewDiv = document.getElementById('imagePreview');
+                    previewDiv.innerHTML = `<img src="${event.target.result}" style="max-width: 100%; max-height: 150px; border-radius: 8px; margin-top: 10px;">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function addMenuItem() {
+            const name = document.getElementById('menuName').value.trim();
+            const category = document.getElementById('menuCategory').value;
+            const price = document.getElementById('menuPrice').value;
+            const desc = document.getElementById('menuDesc').value.trim();
+            const imageFile = document.getElementById('menuImage').files[0];
+
+            if (!name || !price) {
+                showAlert('Fill required fields', 'warning');
+                return;
+            }
+
+            let imageUrl = '';
+            
+            // Upload image if provided
+            if (imageFile) {
+                const formData = new FormData();
+                formData.append('action', 'upload_image');
+                formData.append('image', imageFile);
+
+                try {
+                    const response = await fetch('./backend/menu.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        imageUrl = result.image_url;
+                    }
+                } catch (error) {
+                    console.error('Image upload error:', error);
+                }
+            }
+
+            const result = await apiCall('menu.php', 'POST', {
+                action: 'add_item',
+                name: name,
+                category: category,
+                description: desc,
+                price: price,
+                image_url: imageUrl
+            });
+
+            if (result.success) {
+                showAlert('Item added!', 'success');
+                document.getElementById('menuName').value = '';
+                document.getElementById('menuPrice').value = '';
+                document.getElementById('menuDesc').value = '';
+                document.getElementById('menuImage').value = '';
+                document.getElementById('imagePreview').innerHTML = '';
+                loadMenu();
+            }
+        }
+
+        // Robot monitoring - now driven by real-time database state
+        let robotMonitoringActive = false;
+        let robotMonitoringInterval;
+
+        function startRobotSimulation() {
+            if (robotMonitoringActive) return;
+            robotMonitoringActive = true;
+
+            // Reload robot monitoring every 1 second for smooth updates
+            robotMonitoringInterval = setInterval(() => {
+                loadRobots();
+            }, 1000);
+
+            showAlert('Live robot monitoring started!', 'success');
+        }
+
+        function stopRobotSimulation() {
+            if (robotMonitoringInterval) {
+                clearInterval(robotMonitoringInterval);
+                robotMonitoringActive = false;
+                showAlert('Live robot monitoring paused!', 'info');
+            }
+        }
+
+        async function deleteOrder(orderId) {
+            if (confirm('Delete this order?')) {
+                const result = await apiCall('orders.php', 'POST', {
+                    action: 'delete_order',
+                    order_id: orderId
+                });
+                if (result.success) {
+                    showAlert('Order deleted', 'success');
+                    loadOrders();
+                }
+            }
+        }
+
+        async function deleteRobot(robotId) {
+            if (confirm('Delete this robot?')) {
+                const result = await apiCall('robots.php', 'POST', {
+                    action: 'delete_robot',
+                    robot_id: robotId
+                });
+                if (result.success) {
+                    showAlert('Robot deleted', 'success');
+                    loadRobots();
+                }
+            }
+        }
+
+        async function deleteTable(tableId) {
+            if (confirm('Delete this table?')) {
+                const result = await apiCall('tables.php', 'POST', {
+                    action: 'delete_table',
+                    table_id: tableId
+                });
+                if (result.success) {
+                    showAlert('Table deleted', 'success');
+                    loadTables();
+                }
+            }
+        }
+
+        async function deleteMenuItem(itemId) {
+            if (confirm('Delete this item?')) {
+                const result = await apiCall('menu.php', 'POST', {
+                    action: 'delete_item',
+                    id: itemId
+                });
+                if (result.success) {
+                    showAlert('Item deleted', 'success');
+                    loadMenu();
+                }
+            }
+        }
+
+        function checkSystemHealth() {
+            loadSystemInfo();
+            showAlert('System health checked!', 'success');
+        }
+
+        function logout() {
+            if (confirm('Logout from admin?')) {
+                // Clear all refresh intervals
+                clearInterval(dashboardRefreshInterval);
+                clearInterval(ordersRefreshInterval);
+                clearInterval(robotsRefreshInterval);
+                clearInterval(systemHealthRefreshInterval);
+                
+                sessionStorage.removeItem('admin_session_token');
+                localStorage.removeItem('admin_remember_me');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

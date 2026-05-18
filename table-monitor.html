@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Restaurant - Order & Track</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 0;
+            background: white;
+            border-bottom: 3px solid #ecf0f1;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -3px;
+        }
+
+        .tab-btn:hover {
+            color: #27ae60;
+            background: #f8f9fa;
+        }
+
+        .tab-btn.active {
+            color: #27ae60;
+            border-bottom-color: #27ae60;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Menu Grid with Images */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .meal-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .meal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .meal-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .meal-info {
+            padding: 15px;
+        }
+
+        .meal-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .meal-price {
+            color: #27ae60;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .meal-footer {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .meal-footer input {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ecf0f1;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .meal-footer button {
+            flex: 1;
+            padding: 8px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .meal-footer button:hover {
+            background: #229954;
+        }
+
+        /* Order Tracking */
+        .order-status-timeline {
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50px;
+            width: 3px;
+            height: 40px;
+            background: #ecf0f1;
+            z-index: 0;
+        }
+
+        .timeline-marker {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 3px solid #ecf0f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .timeline-item.completed .timeline-marker {
+            background: #27ae60;
+            border-color: #27ae60;
+            color: white;
+        }
+
+        .timeline-item.active .timeline-marker {
+            background: #f39c12;
+            border-color: #f39c12;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding-top: 5px;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .timeline-desc {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .robot-status {
+            background: #e5f4ed;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #27ae60;
+        }
+
+        /* Review Section */
+        .rating-selector {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.3;
+        }
+
+        .star-btn:hover,
+        .star-btn.selected {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .review-form-group {
+            margin: 20px 0;
+        }
+
+        .review-form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .review-form-group select,
+        .review-form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .review-form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .review-form-group select:focus,
+        .review-form-group textarea:focus {
+            outline: none;
+            border-color: #27ae60;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        .existing-reviews {
+            margin-top: 30px;
+        }
+
+        .review-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-rating {
+            color: #f39c12;
+            font-size: 16px;
+        }
+
+        .review-date {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+
+        .review-text {
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* Receipt */
+        .receipt {
+            background: white;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            padding: 25px;
+            max-width: 400px;
+            margin: 20px auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #ecf0f1;
+            padding-bottom: 15px;
+        }
+
+        .receipt-logo {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .receipt-title {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .receipt-divider {
+            border: 1px dashed #ecf0f1;
+            margin: 15px 0;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .receipt-row.total {
+            font-weight: bold;
+            border-top: 2px solid #ecf0f1;
+            border-bottom: 2px solid #ecf0f1;
+            padding: 10px 0;
+            margin: 15px 0;
+        }
+
+        .receipt-row.section-title {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        /* Side Cart */
+        .side-cart {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .side-cart-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-items-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 13px;
+        }
+
+        .cart-item-name {
+            flex: 1;
+            color: #2c3e50;
+        }
+
+        .cart-item-price {
+            font-weight: 600;
+            color: #27ae60;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .cart-remove {
+            background: none;
+            border: none;
+            color: #c0392b;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .cart-summary-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .summary-row.total {
+            font-weight: 700;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 8px;
+            color: #27ae60;
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .side-cart {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 13px;
+            }
+        }
+
+        .print-btn {
+            background: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 10px;
+        }
+
+        .print-btn:hover {
+            background: #229954;
+        }
+
+        @media print {
+            body * {
+                display: none;
+            }
+            .receipt {
+                display: block !important;
+                max-width: 100%;
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">🍽️ Smart Restaurant</div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: #27ae60;">
+                Table: <span id="tableNumber">-</span>
+            </div>
+            <div id="cartBadge" style="display: flex; gap: 10px;">
+                <span class="badge badge-primary" style="font-size: 1rem; padding: 0.5rem 1rem;">🛒 <span id="cartCount">0</span></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="padding: 30px 20px; max-width: 1400px; margin: 0 auto;">
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('menu', event)">🍴 Order Menu</button>
+            <button class="tab-btn" onclick="switchTab('track', event)">📍 Track Order</button>
+            <button class="tab-btn" onclick="switchTab('notifications', event)">🔔 Notifications</button>
+            <button class="tab-btn" onclick="switchTab('review', event)">⭐ Review</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 320px; gap: 30px; align-items: start;">
+            <!-- Main Content -->
+            <div>
+                <!-- Menu Tab -->
+                <div id="menu-tab" class="tab-content active">
+                    <h2 style="margin-bottom: 20px; color: #2c3e50;">🍴 Browse Our Menu</h2>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: 600; color: #2c3e50; display: block; margin-bottom: 10px;">Filter by Category:</label>
+                        <select id="categoryFilter" style="width: 200px; padding: 8px; border: 2px solid #ecf0f1; border-radius: 6px;">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+
+                    <div class="menu-grid" id="menuContainer">
+                        <!-- Menu items loaded here -->
+                        <p style="text-align: center; color: #7f8c8d;">Loading menu...</p>
+                    </div>
+                </div>
+
+                <!-- Track Tab -->
+                <div id="track-tab" class="tab-content">
+                    <h2 style="margin-bottom: 30px; color: #2c3e50;">📍 Order Tracking</h2>
+                    
+                    <div id="trackingContent">
+                        <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                            <p style="font-size: 16px;">No active orders yet.</p>
+                            <p>Place an order to track it here!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Tab -->
+                <div id="notifications-tab" class="tab-content">
+                    <h2 style="margin-bottom: 30px; color: #2c3e50;">🔔 Your Notifications</h2>
+                    
+                    <div id="notificationsContent">
+                        <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                            <p style="font-size: 16px;">📭 No notifications yet.</p>
+                            <p>You'll receive real-time updates about your orders here!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Tab -->
+                <div id="review-tab" class="tab-content">
+                    <h2 style="margin-bottom: 30px; color: #2c3e50;">⭐ Review Your Experience</h2>
+                    
+                    <div id="reviewContent">
+                        <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                            <p style="font-size: 16px;">No completed orders yet.</p>
+                            <p>Complete an order to leave a review!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Cart -->
+            <div class="side-cart" id="sideCart">
+                <div class="side-cart-title">🛒 Your Order</div>
+                <div class="cart-items-list" id="cartItemsList">
+                    <p style="color: #7f8c8d; text-align: center; font-size: 13px;">Cart is empty</p>
+                </div>
+                <div class="cart-summary-box" id="summaryBox">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotalPrice">KES 0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (16%):</span>
+                        <span id="taxPrice">KES 0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="totalPrice">KES 0</span>
+                    </div>
+                </div>
+
+                <div class="review-form-group">
+                    <label>Order Type:</label>
+                    <select id="orderType" style="width: 100%;">
+                        <option value="Eat-in">🍽️ Eat-in</option>
+                        <option value="Takeaway">🥡 Takeaway</option>
+                    </select>
+                </div>
+
+                <div class="review-form-group">
+                    <label>Customer Name: <span style="color: #e74c3c;">*</span></label>
+                    <input type="text" id="customerName" placeholder="Your full name" style="width: 100%; padding: 8px; border: 2px solid #ecf0f1; border-radius: 6px;" required>
+                </div>
+
+                <div class="review-form-group">
+                    <label>Phone Number:</label>
+                    <input type="text" id="phoneNumber" placeholder="+254712345678" style="width: 100%; padding: 8px; border: 2px solid #ecf0f1; border-radius: 6px;">
+                </div>
+
+                <button class="btn btn-primary" onclick="placeOrder()" style="margin-bottom: 8px; width: 100%; padding: 12px;">Place Order</button>
+                <button class="btn btn-secondary" onclick="clearCart()" style="width: 100%; padding: 12px;">Clear Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <div class="modal-title">💳 Choose Payment Method</div>
+                <button class="modal-close" onclick="closeModal('paymentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="review-form-group">
+                    <label>Payment Method:</label>
+                    <select id="paymentMethod">
+                        <option value="M-Pesa">📱 M-Pesa</option>
+                        <option value="Cash">💵 Cash</option>
+                        <option value="Bank transfer">🏦 Bank Transfer</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="processPayment()" style="width: 100%; padding: 12px;">Proceed to Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        let cart = [];
+        let currentOrder = null;
+        let activeOrders = [];
+        let currentCustomerId = null;
+        let pollingInterval = null;
+        let notifications = [];
+        let orderDeliveryTimers = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTableNumber();
+            loadMenu();
+            loadCategories();
+            checkForActiveOrders();
+            // Start real-time polling for order updates (every 3 seconds)
+            startRealTimePolling();
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            stopRealTimePolling();
+            if (window.countdownInterval) clearInterval(window.countdownInterval);
+            // Clear all delivery timers
+            Object.keys(orderDeliveryTimers).forEach(key => {
+                if (orderDeliveryTimers[key].timeoutId) {
+                    clearTimeout(orderDeliveryTimers[key].timeoutId);
+                }
+            });
+        });
+
+        function startRealTimePolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+            pollingInterval = setInterval(() => {
+                checkForActiveOrders();
+            }, 3000);
+        }
+
+        function stopRealTimePolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+        }
+
+        function switchTab(tabName, event) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+            
+            // Start countdown timer if tracking tab is active
+            if (tabName === 'track' || tabName === 'notifications') {
+                if (!window.countdownInterval) {
+                    window.countdownInterval = setInterval(() => {
+                        updateTrackingDisplay();
+                        updateNotificationsDisplay();
+                    }, 1000);
+                }
+            } else {
+                // Stop countdown timer if not on tracking tab
+                if (window.countdownInterval) {
+                    clearInterval(window.countdownInterval);
+                    window.countdownInterval = null;
+                }
+            }
+        }
+
+        function loadTableNumber() {
+            const tableId = getTableId();
+            document.getElementById('tableNumber').textContent = tableId || 'Auto-Detected';
+        }
+
+        async function loadMenu(category = '') {
+            const endpoint = category ? `menu.php?action=get_menu&category=${category}` : 'menu.php?action=get_menu';
+            const result = await apiCall(endpoint);
+
+            if (result.success) {
+                const menuContainer = document.getElementById('menuContainer');
+                menuContainer.innerHTML = '';
+
+                if (result.menu && result.menu.length > 0) {
+                    result.menu.forEach(item => {
+                        const mealCard = document.createElement('div');
+                        mealCard.className = 'meal-card';
+                        const imageUrl = item.image_url ? `assets/meals/${item.image_url}` : '';
+                        const imageHtml = imageUrl 
+                            ? `<img src="${imageUrl}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22%3E%3Crect fill=%22%2327ae60%22 width=%22100%25%22 height=%22100%25%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2240%22 text-anchor=%22middle%22 dy=%22.3em%22%3E🍴%3C/text%3E%3C/svg%3E'">`
+                            : '<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); display: flex; align-items: center; justify-content: center; font-size: 50px;">🍴</div>';
+                        
+                        mealCard.innerHTML = `
+                            <div class="meal-image" style="height: 160px; overflow: hidden;">${imageHtml}</div>
+                            <div class="meal-info">
+                                <div class="meal-name">${item.name}</div>
+                                <div style="font-size: 12px; color: #7f8c8d; margin-bottom: 8px;">${item.category}</div>
+                                <div style="font-size: 13px; color: #555; margin-bottom: 10px; min-height: 30px;">${item.description || 'Delicious meal'}</div>
+                                <div class="meal-price">${formatCurrency(item.price)}</div>
+                                <div class="meal-footer">
+                                    <input type="number" min="0" max="10" value="0" class="meal-qty" id="qty-${item.id}">
+                                    <button onclick="addToCart(${item.id}, '${item.name}', ${item.price})">Add</button>
+                                </div>
+                            </div>
+                        `;
+                        menuContainer.appendChild(mealCard);
+                    });
+                }
+            }
+        }
+
+        async function loadCategories() {
+            const result = await apiCall('menu.php?action=get_categories');
+            if (result.success && result.categories) {
+                const select = document.getElementById('categoryFilter');
+                result.categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat;
+                    select.appendChild(option);
+                });
+                select.addEventListener('change', e => loadMenu(e.target.value));
+            }
+        }
+
+        function addToCart(id, name, price) {
+            const qty = parseInt(document.getElementById(`qty-${id}`).value) || 0;
+            if (qty <= 0) {
+                showAlert('Select a quantity', 'warning');
+                return;
+            }
+
+            const existing = cart.find(i => i.id === id);
+            if (existing) {
+                existing.quantity += qty;
+            } else {
+                cart.push({id, name, price, quantity: qty});
+            }
+
+            document.getElementById(`qty-${id}`).value = 0;
+            updateCart();
+            showAlert(`${name} added!`, 'success');
+        }
+
+        function updateCart() {
+            const list = document.getElementById('cartItemsList');
+            if (cart.length === 0) {
+                list.innerHTML = '<p style="color: #7f8c8d; text-align: center; font-size: 13px;">Cart is empty</p>';
+                document.getElementById('cartCount').textContent = '0';
+                updateSummary();
+                return;
+            }
+
+            list.innerHTML = '';
+            cart.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                const itemTotal = item.price * item.quantity;
+                div.innerHTML = `
+                    <div>
+                        <div class="cart-item-name">${item.name} x${item.quantity}</div>
+                        <div class="cart-item-price">${formatCurrency(itemTotal)}</div>
+                    </div>
+                    <button class="cart-remove" onclick="removeFromCart(${idx})">✕</button>
+                `;
+                list.appendChild(div);
+            });
+
+            document.getElementById('cartCount').textContent = cart.reduce((s, i) => s + i.quantity, 0);
+            updateSummary();
+        }
+
+        function removeFromCart(idx) {
+            cart.splice(idx, 1);
+            updateCart();
+        }
+
+        function clearCart() {
+            if (cart.length === 0) {
+                showAlert('Cart is empty!', 'warning');
+                return;
+            }
+            if (confirm('Clear cart?')) {
+                cart = [];
+                updateCart();
+            }
+        }
+
+        function updateSummary() {
+            const subtotal = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
+            const tax = subtotal * 0.16;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotalPrice').textContent = formatCurrency(subtotal);
+            document.getElementById('taxPrice').textContent = formatCurrency(tax);
+            document.getElementById('totalPrice').textContent = formatCurrency(total);
+        }
+
+        async function placeOrder() {
+            if (cart.length === 0) {
+                showAlert('Add items first!', 'warning');
+                return;
+            }
+
+            const customerName = document.getElementById('customerName').value.trim();
+            if (!customerName) {
+                showAlert('Please enter your name!', 'warning');
+                document.getElementById('customerName').focus();
+                return;
+            }
+
+            const orderData = {
+                action: 'create_order',
+                table_id: getTableId() || 'T001',
+                order_type: document.getElementById('orderType').value,
+                items: JSON.stringify(cart),
+                customer_name: customerName,
+                customer_phone: document.getElementById('phoneNumber').value || null
+            };
+
+            const result = await apiCall('orders.php', 'POST', orderData);
+            if (result.success) {
+                currentOrder = result;
+                currentCustomerId = result.customer_id;
+                
+                // Store order data in localStorage for later use (reviews, tracking)
+                localStorage.setItem('lastOrder_' + result.order_id, JSON.stringify({
+                    order_id: result.order_id,
+                    order_number: result.order_number,
+                    customer_id: result.customer_id,
+                    customer_name: customerName,
+                    total_amount: result.total_amount,
+                    table_id: getTableId() || 'T001',
+                    timestamp: new Date().getTime(),
+                    assigned_robot: result.assigned_robot
+                }));
+                
+                // Show robot assignment notification
+                if (result.assigned_robot) {
+                    showAlert(`🤖 Great! ${result.assigned_robot} has been assigned to deliver your order!`, 'success', 5000);
+                    addNotification(`Robot ${result.assigned_robot} assigned to your order`, 'robot');
+                }
+                
+                openModal('paymentModal');
+            } else {
+                showAlert('Order failed!', 'danger');
+            }
+        }
+
+        async function simulateDelivery(orderId) {
+            // Simulate robot delivering the order
+            const result = await apiCall('orders.php', 'POST', {
+                action: 'simulate_delivery',
+                order_id: orderId
+            });
+            
+            if (result.success) {
+                showAlert('🎉 Your order has been delivered! Please enjoy your meal!', 'success');
+                addNotification('Your order has been successfully delivered! 🎉', 'delivery');
+                checkForActiveOrders();
+                updateTrackingDisplay();
+            }
+        }
+
+        // ========== NOTIFICATIONS SYSTEM ==========
+        function addNotification(message, type = 'info') {
+            const notification = {
+                id: Date.now(),
+                message: message,
+                type: type,
+                timestamp: new Date()
+            };
+            notifications.unshift(notification);
+            updateNotificationsDisplay();
+            
+            // Show toast notification
+            showAlert(message, 'success', 4000);
+        }
+
+        function updateNotificationsDisplay() {
+            const container = document.getElementById('notificationsContent');
+            if (!container) return;
+
+            if (notifications.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        <p style="font-size: 16px;">📭 No notifications yet.</p>
+                        <p>You'll receive real-time updates about your orders here!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            notifications.forEach(notif => {
+                const icon = notif.type === 'robot' ? '🤖' : notif.type === 'delivery' ? '🎉' : '📢';
+                const time = notif.timestamp.toLocaleTimeString();
+                
+                let bgColor = '#e8f5e9';
+                let borderColor = '#27ae60';
+                
+                if (notif.type === 'robot') {
+                    bgColor = '#e3f2fd';
+                    borderColor = '#3498db';
+                } else if (notif.type === 'delivery') {
+                    bgColor = '#fff3e0';
+                    borderColor = '#f39c12';
+                }
+
+                html += `
+                    <div style="background: ${bgColor}; padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid ${borderColor}; display: flex; align-items: center; gap: 15px;">
+                        <div style="font-size: 24px;">${icon}</div>
+                        <div style="flex: 1;">
+                            <p style="margin: 0; color: #2c3e50; font-weight: 500;">${notif.message}</p>
+                            <p style="margin: 5px 0 0 0; font-size: 12px; color: #7f8c8d;">${time}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        async function processPayment() {
+            if (!currentOrder) return;
+
+            const paymentData = {
+                action: 'process_payment',
+                order_id: currentOrder.order_id,
+                amount: currentOrder.total_amount,
+                payment_method: document.getElementById('paymentMethod').value
+            };
+
+            const result = await apiCall('payments.php', 'POST', paymentData);
+            if (result.success) {
+                closeModal('paymentModal');
+                showReceipt();
+                cart = [];
+                updateCart();
+                showAlert('Payment successful!', 'success');
+                setTimeout(() => {
+                    checkForActiveOrders();
+                    document.querySelector('[onclick*="track"]').click();
+                }, 500);
+            }
+        }
+
+        function showReceipt() {
+            if (!currentOrder) return;
+
+            const subtotal = currentOrder.total_amount / 1.16;
+            const tax = currentOrder.total_amount - subtotal;
+
+            const receiptHTML = `
+                <div class="receipt" id="receiptToPrint">
+                    <div class="receipt-header">
+                        <div class="receipt-logo">🍽️</div>
+                        <div class="receipt-title">SMART RESTAURANT</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Receipt</div>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Order #:</span>
+                        <span>${currentOrder.order_number}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Table:</span>
+                        <span>${getTableId() || 'N/A'}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Date & Time:</span>
+                        <span>${new Date().toLocaleString()}</span>
+                    </div>
+
+                    <div class="receipt-divider"></div>
+
+                    <div class="receipt-row section-title">Items Ordered</div>
+                    ${cart.map(item => `
+                        <div class="receipt-row">
+                            <span>${item.name} x${item.quantity}</span>
+                            <span>${formatCurrency(item.price * item.quantity)}</span>
+                        </div>
+                    `).join('')}
+
+                    <div class="receipt-divider"></div>
+
+                    <div class="receipt-row">
+                        <span>Subtotal:</span>
+                        <span>${formatCurrency(subtotal)}</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Tax (16%):</span>
+                        <span>${formatCurrency(tax)}</span>
+                    </div>
+
+                    <div class="receipt-row total">
+                        <span>TOTAL PAID:</span>
+                        <span>${formatCurrency(currentOrder.total_amount)}</span>
+                    </div>
+
+                    <div class="receipt-footer">
+                        <p>✓ Payment Successful</p>
+                        <p>Thank you for your order!</p>
+                        <p>Your meal will be delivered shortly</p>
+                        <button class="print-btn" onclick="window.print()">🖨️ Print Receipt</button>
+                    </div>
+                </div>
+            `;
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'receiptModal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <div class="modal-title">✓ Order Confirmed!</div>
+                        <button class="modal-close" onclick="document.getElementById('receiptModal').remove()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        ${receiptHTML}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        async function checkForActiveOrders() {
+            const tableId = getTableId() || 'T001';
+            
+            // Trigger auto-progression of order statuses
+            await apiCall('orders.php', 'POST', { action: 'auto_progress_status' });
+            
+            // Get updated orders
+            const result = await apiCall(`orders.php?action=get_orders&table_id=${tableId}`);
+
+            if (result.success && result.orders && result.orders.length > 0) {
+                activeOrders = result.orders;
+                
+                // Check for robot assignments and start delivery timers
+                activeOrders.forEach(order => {
+                    if (order.assigned_robot && !orderDeliveryTimers[order.id]) {
+                        // Start 7-second delivery timer
+                        startDeliveryTimer(order.id, order.order_number);
+                    }
+                });
+                
+                updateTrackingDisplay();
+                updateReviewSection();
+                
+                // Update countdown timer every second
+                if (document.getElementById('track-tab')?.classList.contains('active')) {
+                    if (!window.countdownInterval) {
+                        window.countdownInterval = setInterval(() => {
+                            if (document.getElementById('track-tab')?.classList.contains('active')) {
+                                updateTrackingDisplay();
+                            }
+                        }, 1000);
+                    }
+                }
+            }
+        }
+
+        function startDeliveryTimer(orderId, orderNumber) {
+            orderDeliveryTimers[orderId] = {
+                startTime: Date.now(),
+                duration: 20000, // 20 seconds for demo
+                completed: false,
+                timeoutId: null
+            };
+
+            const timeoutId = setTimeout(() => {
+                if (!orderDeliveryTimers[orderId].completed) {
+                    completeOrderDelivery(orderId, orderNumber);
+                }
+            }, 20000);
+            
+            orderDeliveryTimers[orderId].timeoutId = timeoutId;
+        }
+
+        async function completeOrderDelivery(orderId, orderNumber) {
+            orderDeliveryTimers[orderId].completed = true;
+
+            // Call backend to mark order as delivered and robot as idle
+            const result = await apiCall('orders.php', 'POST', {
+                action: 'simulate_delivery',
+                order_id: orderId
+            });
+
+            if (result.success) {
+                addNotification(`Order #${orderNumber} has been successfully delivered! 🎉`, 'delivery');
+                checkForActiveOrders();
+                updateTrackingDisplay();
+                updateNotificationsDisplay();
+            }
+        }
+
+        function updateTrackingDisplay() {
+            if (activeOrders.length === 0) {
+                document.getElementById('trackingContent').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        <p>No active orders</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            activeOrders.forEach(order => {
+                const statuses = ['Pending', 'Cooking', 'Ready', 'Delivering', 'Delivered'];
+                const currentIdx = statuses.indexOf(order.status);
+
+                // Calculate remaining delivery time
+                let deliveryTimeHtml = '';
+                if (order.status !== 'Delivered') {
+                    const createdTime = new Date(order.created_at).getTime();
+                    const currentTime = Date.now();
+                    const elapsedSeconds = Math.floor((currentTime - createdTime) / 1000);
+                    const estimatedTotalSeconds = 60; // 60 seconds total for demo (20s delivery)
+                    const remainingSeconds = Math.max(0, estimatedTotalSeconds - elapsedSeconds);
+                    
+                    if (order.status === 'Delivering' && remainingSeconds > 0) {
+                        const minutes = Math.floor(remainingSeconds / 60);
+                        const seconds = remainingSeconds % 60;
+                        deliveryTimeHtml = `
+                            <div style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: bold;">
+                                ⏱️ Expected delivery time: ${minutes}m ${seconds}s
+                            </div>
+                        `;
+                    } else if (order.status === 'Delivering') {
+                        deliveryTimeHtml = `
+                            <div style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: bold;">
+                                ✓ Order Delivered Successfully 🎉
+                            </div>
+                        `;
+                    }
+                } else {
+                    deliveryTimeHtml = `
+                        <div style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: bold;">
+                            ✓ Order Delivered Successfully 🎉
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div style="margin-bottom: 40px; background: #f8f9fa; padding: 20px; border-radius: 12px;">
+                        <h3 style="color: #2c3e50; margin-bottom: 20px;">Order #${order.order_number}</h3>
+                        
+                        ${order.assigned_robot ? `
+                            <div style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                                <div style="font-size: 40px; margin-bottom: 10px;">🤖</div>
+                                <strong>${order.assigned_robot}</strong> delivering your order!<br>
+                                <span style="font-size: 14px; opacity: 0.9;">Robot is on the way to your table</span>
+                            </div>
+                        ` : ''}
+                        
+                        ${deliveryTimeHtml}
+                        
+                        <div class="order-status-timeline">
+                            ${statuses.map((status, idx) => `
+                                <div class="timeline-item ${idx <= currentIdx ? 'completed' : ''} ${idx === currentIdx ? 'active' : ''}">
+                                    <div class="timeline-marker">${idx <= currentIdx ? '✓' : idx + 1}</div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">${status}</div>
+                                        <div class="timeline-desc">
+                                            ${status === 'Pending' ? 'Waiting for kitchen' : ''}
+                                            ${status === 'Cooking' ? 'Being prepared' : ''}
+                                            ${status === 'Ready' ? 'Ready for pickup' : ''}
+                                            ${status === 'Delivering' ? 'Robot on the way' : ''}
+                                            ${status === 'Delivered' ? 'Enjoy your meal! 🎉' : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('trackingContent').innerHTML = html;
+        }
+
+        function updateReviewSection() {
+            const completedOrders = activeOrders.filter(o => o.status === 'Delivered');
+            
+            if (completedOrders.length === 0) {
+                document.getElementById('reviewContent').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        <p style="font-size: 16px;">No completed orders yet.</p>
+                        <p>Complete an order to leave a review!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Build review form for each completed order
+            let html = '';
+            completedOrders.forEach((order, idx) => {
+                html += `
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                        <h4 style="margin-top: 0; color: #2c3e50;">Order #${order.order_number}</h4>
+                        
+                        <div style="display: flex; gap: 20px;">
+                            <div style="flex: 1;">
+                                <div class="review-form-group">
+                                    <label>Your Rating (1-5 stars):</label>
+                                    <div class="rating-selector" id="rating-${order.id}">
+                                        <button class="star-btn" onclick="selectRatingForOrder(${order.id}, 1)" title="1 star">⭐</button>
+                                        <button class="star-btn" onclick="selectRatingForOrder(${order.id}, 2)" title="2 stars">⭐</button>
+                                        <button class="star-btn" onclick="selectRatingForOrder(${order.id}, 3)" title="3 stars">⭐</button>
+                                        <button class="star-btn" onclick="selectRatingForOrder(${order.id}, 4)" title="4 stars">⭐</button>
+                                        <button class="star-btn" onclick="selectRatingForOrder(${order.id}, 5)" title="5 stars">⭐</button>
+                                    </div>
+                                    <input type="hidden" id="selectedRating-${order.id}" value="0">
+                                </div>
+
+                                <div class="review-form-group">
+                                    <label>Your Review (Optional):</label>
+                                    <textarea id="reviewText-${order.id}" placeholder="Tell us about your experience..." style="width: 100%; padding: 10px; border: 2px solid #ecf0f1; border-radius: 6px; font-family: inherit;"></textarea>
+                                </div>
+
+                                <button class="btn btn-primary" onclick="submitReviewForOrder(${order.id})" style="width: 100%; padding: 10px;">Submit Review</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Add section to display existing reviews
+            html += `
+                <div style="margin-top: 30px;">
+                    <h3 style="color: #2c3e50;">📝 Your Reviews</h3>
+                    <div id="existingReviewsContainer" style="margin-top: 15px;">
+                        <p style="color: #7f8c8d; text-align: center;">Loading reviews...</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('reviewContent').innerHTML = html;
+            
+            // Load and display existing reviews
+            loadExistingReviews();
+        }
+
+        function selectRatingForOrder(orderId, rating) {
+            document.getElementById('selectedRating-' + orderId).value = rating;
+            const ratingContainer = document.getElementById('rating-' + orderId);
+            ratingContainer.querySelectorAll('.star-btn').forEach((btn, idx) => {
+                btn.classList.toggle('selected', idx < rating);
+                btn.style.opacity = idx < rating ? '1' : '0.3';
+            });
+        }
+
+        async function submitReviewForOrder(orderId) {
+            const rating = document.getElementById('selectedRating-' + orderId).value;
+            const comment = document.getElementById('reviewText-' + orderId).value;
+
+            if (!rating || rating === '0') {
+                showAlert('Please select a rating', 'warning');
+                return;
+            }
+
+            // Get the customer_id from the order
+            let customerId = currentCustomerId || 1;
+            const selectedOrder = activeOrders.find(o => o.id == orderId);
+            if (selectedOrder && selectedOrder.customer_id) {
+                customerId = selectedOrder.customer_id;
+            }
+
+            const reviewData = {
+                action: 'submit_review',
+                order_id: orderId,
+                customer_id: customerId,
+                rating: rating,
+                comment: comment || ''
+            };
+
+            const result = await apiCall('reviews.php', 'POST', reviewData);
+            if (result.success) {
+                showAlert('Thank you for your review!', 'success');
+                document.getElementById('reviewText-' + orderId).value = '';
+                selectRatingForOrder(orderId, 0);
+                // Refresh reviews display
+                loadExistingReviews();
+            } else {
+                showAlert(result.message || 'Error submitting review', 'danger');
+            }
+        }
+
+        async function loadExistingReviews() {
+            const tableId = getTableId() || 'T001';
+            const result = await apiCall(`reviews.php?action=get_reviews_for_table&table_id=${tableId}`);
+            
+            if (result.success && result.reviews && result.reviews.length > 0) {
+                let html = '';
+                result.reviews.forEach(review => {
+                    const stars = '⭐'.repeat(review.rating);
+                    html += `
+                        <div class="review-item" style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #27ae60;">
+                            <div class="review-header" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                <span class="review-rating" style="color: #f39c12; font-size: 18px;">${stars}</span>
+                                <span class="review-date" style="color: #7f8c8d; font-size: 12px;">${new Date(review.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <div class="review-text" style="color: #2c3e50; line-height: 1.6;">${review.comment || 'No comment provided'}</div>
+                        </div>
+                    `;
+                });
+                document.getElementById('existingReviewsContainer').innerHTML = html;
+            } else {
+                document.getElementById('existingReviewsContainer').innerHTML = `
+                    <p style="color: #7f8c8d; text-align: center;">No reviews yet. Be the first to share your experience!</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

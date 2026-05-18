@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Display System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: #1a1a1a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .kds-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kds-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .kds-stats {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #27ae60;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #bdc3c7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kds-container {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            min-height: calc(100vh - 100px);
+            background: #1a1a1a;
+        }
+
+        .order-card {
+            background: #2c3e50;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .order-card.pending {
+            border-color: #e74c3c;
+        }
+
+        .order-card.cooking {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .order-card.ready {
+            border-color: #27ae60;
+            box-shadow: 0 10px 30px rgba(39, 174, 96, 0.3);
+        }
+
+        .order-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .order-header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .order-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #27ae60;
+        }
+
+        .order-time {
+            font-size: 12px;
+            color: #bdc3c7;
+        }
+
+        .order-status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .order-status-badge.pending {
+            background: #c0392b;
+            color: white;
+        }
+
+        .order-status-badge.cooking {
+            background: #f39c12;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .order-status-badge.ready {
+            background: #27ae60;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .order-items {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .order-items-title {
+            font-size: 12px;
+            color: #95a5a6;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ecf0f1;
+        }
+
+        .item-qty {
+            background: #f39c12;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .order-details {
+            display: flex;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: #95a5a6;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ecf0f1;
+        }
+
+        .order-footer {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .btn-start {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-start:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        .btn-ready {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-ready:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-mark-ready {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-mark-ready:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            flex-direction: column;
+            gap: 20px;
+            color: #7f8c8d;
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .filter-section {
+            padding: 20px 30px;
+            background: #2c3e50;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 2px solid #34495e;
+        }
+
+        .filter-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #bdc3c7;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #27ae60;
+            border-color: #27ae60;
+            color: white;
+        }
+
+        /* Sound notification */
+        .notification-sound {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .kds-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+
+            .kds-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .kds-stats {
+                width: 100%;
+                justify-content: space-around;
+                gap: 15px;
+            }
+
+            .filter-section {
+                padding: 15px;
+                flex-wrap: wrap;
+            }
+        }
+
+        .order-timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #f39c12;
+            font-weight: 700;
+        }
+
+        .timer-icon {
+            font-size: 18px;
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #27ae60;
+            animation: progress 3s linear;
+        }
+
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="kds-header">
+        <div class="kds-title">
+            👨‍🍳 Kitchen Display System
+        </div>
+        <div class="kds-stats">
+            <div class="stat">
+                <div class="stat-value" id="pendingCount">0</div>
+                <div class="stat-label">Pending Orders</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="cookingCount">0</div>
+                <div class="stat-label">Cooking</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="readyCount">0</div>
+                <div class="stat-label">Ready for Delivery</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <span class="filter-label">Filter:</span>
+        <button class="filter-btn active" onclick="filterOrders('all')">All Orders</button>
+        <button class="filter-btn" onclick="filterOrders('Pending')">⏳ Pending</button>
+        <button class="filter-btn" onclick="filterOrders('Cooking')">🔥 Cooking</button>
+        <button class="filter-btn" onclick="filterOrders('Ready')">✅ Ready</button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="kds-container" id="ordersContainer">
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <div class="empty-text">No orders. System is ready for action.</div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        let allOrders = [];
+        let currentFilter = 'all';
+        let autoRefreshInterval = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrders();
+            // Auto-refresh every 3 seconds
+            autoRefreshInterval = setInterval(loadOrders, 3000);
+        });
+
+        async function loadOrders() {
+            const result = await apiCall('orders.php?action=get_orders_for_kitchen');
+            
+            if (result.success && result.orders) {
+                allOrders = result.orders;
+                updateStats();
+                displayOrders();
+            }
+        }
+
+        function updateStats() {
+            const pending = allOrders.filter(o => o.status === 'Pending').length;
+            const cooking = allOrders.filter(o => o.status === 'Cooking').length;
+            const ready = allOrders.filter(o => o.status === 'Ready').length;
+
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('cookingCount').textContent = cooking;
+            document.getElementById('readyCount').textContent = ready;
+        }
+
+        function displayOrders() {
+            const container = document.getElementById('ordersContainer');
+            
+            let filteredOrders = allOrders;
+            if (currentFilter !== 'all') {
+                filteredOrders = allOrders.filter(o => o.status === currentFilter);
+            }
+
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">✅</div>
+                        <div class="empty-text">All orders completed or no matching orders.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            
+            // Sort by status priority and time
+            const statusPriority = { 'Pending': 0, 'Cooking': 1, 'Ready': 2 };
+            filteredOrders.sort((a, b) => {
+                if (statusPriority[a.status] !== statusPriority[b.status]) {
+                    return statusPriority[a.status] - statusPriority[b.status];
+                }
+                return new Date(a.created_at) - new Date(b.created_at);
+            });
+
+            filteredOrders.forEach(order => {
+                const card = createOrderCard(order);
+                container.appendChild(card);
+            });
+        }
+
+        function createOrderCard(order) {
+            const card = document.createElement('div');
+            card.className = `order-card ${order.status.toLowerCase()}`;
+            
+            const createdTime = new Date(order.created_at);
+            const now = new Date();
+            const elapsedMinutes = Math.floor((now - createdTime) / 60000);
+
+            let itemsHtml = '';
+            try {
+                const items = JSON.parse(order.items || '[]');
+                items.forEach(item => {
+                    itemsHtml += `
+                        <div class="menu-item">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-qty">${item.quantity}</div>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                itemsHtml = '<div class="menu-item"><div class="item-name">Error loading items</div></div>';
+            }
+
+            const statusButtons = getStatusButtons(order);
+
+            card.innerHTML = `
+                <div class="order-header">
+                    <div>
+                        <div class="order-number">Order #${order.order_number}</div>
+                        <div class="order-time">Table: ${order.table_id}</div>
+                    </div>
+                    <div class="order-status-badge ${order.status.toLowerCase()}">
+                        ${order.status}
+                    </div>
+                </div>
+
+                <div class="order-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Time</div>
+                        <div class="detail-value" style="color: ${elapsedMinutes > 15 ? '#e74c3c' : '#27ae60'};">${elapsedMinutes}m</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Items</div>
+                        <div class="detail-value" id="item-count-${order.order_id}">${getOrderItemCount(order.items)}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Order Type</div>
+                        <div class="detail-value">${order.order_type}</div>
+                    </div>
+                </div>
+
+                <div class="order-items">
+                    <div class="order-items-title">📋 Items to Prepare</div>
+                    ${itemsHtml}
+                </div>
+
+                <div class="order-footer">
+                    ${statusButtons}
+                </div>
+            `;
+
+            return card;
+        }
+
+        function getStatusButtons(order) {
+            if (order.status === 'Pending') {
+                return `
+                    <button class="status-btn btn-start" onclick="updateOrderStatus(${order.order_id}, 'Cooking')">
+                        🔥 Start Cooking
+                    </button>
+                `;
+            } else if (order.status === 'Cooking') {
+                return `
+                    <button class="status-btn btn-ready" onclick="updateOrderStatus(${order.order_id}, 'Ready')">
+                        ✅ Mark Ready
+                    </button>
+                `;
+            } else if (order.status === 'Ready') {
+                return `
+                    <button class="status-btn btn-mark-ready" onclick="viewOrderDetails(${order.order_id})">
+                        👀 View Details
+                    </button>
+                `;
+            }
+        }
+
+        function getOrderItemCount(itemsJson) {
+            try {
+                const items = JSON.parse(itemsJson || '[]');
+                const total = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                return total;
+            } catch (e) {
+                return 1;
+            }
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            const result = await apiCall('orders.php', 'POST', {
+                action: 'update_order_status',
+                order_id: orderId,
+                status: newStatus
+            });
+
+            if (result.success) {
+                loadOrders();
+                playNotificationSound();
+            }
+        }
+
+        function filterOrders(status) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            displayOrders();
+        }
+
+        function viewOrderDetails(orderId) {
+            const order = allOrders.find(o => o.order_id === orderId);
+            if (order) {
+                alert(`Order #${order.order_number}\nTable: ${order.table_id}\nStatus: ${order.status}\n\nThis order is ready for delivery.`);
+            }
+        }
+
+        function playNotificationSound() {
+            // Use Web Audio API to play a notification sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>

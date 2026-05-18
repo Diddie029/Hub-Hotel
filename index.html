@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Restaurant - AI-Powered Dining & Robot Delivery</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js"></script>
+    <style>
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .hero-section h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-section p {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .hero-btn-primary {
+            background: white;
+            color: #27ae60;
+        }
+
+        .hero-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .hero-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 20px;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-title p {
+            font-size: 16px;
+            color: #7f8c8d;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            border-color: #27ae60;
+        }
+
+        .feature-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 20px;
+            background: #f8f9fa;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #27ae60;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .step h4 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .step p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 30px;
+            font-size: 28px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .step:not(:last-child)::after {
+                display: none;
+            }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat {
+            padding: 30px 20px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 20px;
+            background: white;
+            text-align: center;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-box h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .cta-box p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: white;
+            color: #27ae60;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Navigation Header */
+        .header {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #27ae60;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .header-nav a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .header-nav a:hover {
+            color: #27ae60;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 20px;
+            }
+
+            .hero-section h1 {
+                font-size: 32px;
+            }
+
+            .hero-section p {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .hero-btn {
+                width: 100%;
+            }
+
+            .header-nav {
+                gap: 15px;
+            }
+
+            .header-nav a {
+                font-size: 14px;
+            }
+        }
+
+        /* Quick Access Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close {
+            color: #7f8c8d;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #c0392b;
+        }
+
+        .modal-body {
+            margin-bottom: 25px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #27ae60;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        .modal-button {
+            width: 100%;
+            padding: 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-button:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .info-text {
+            background: #e5f4ed;
+            padding: 15px;
+            border-radius: 6px;
+            color: #229954;
+            font-size: 14px;
+            margin-bottom: 15px;
+            border-left: 4px solid #27ae60;
+        }
+
+        /* Chatbot Widget */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 40px rgba(0, 0, 0, 0.16);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .chatbot-widget.open {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .chatbot-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .chat-message.bot span {
+            background: #27ae60;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 18px;
+            border-radius: 18px 18px 18px 0;
+            max-width: 80%;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .chat-message.user span {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 10px 15px;
+            border-radius: 18px;
+            border-radius: 18px 18px 0 18px;
+            max-width: 80%;
+            margin-left: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .chat-input-area {
+            padding: 12px;
+            background: white;
+            border-top: 1px solid #ecf0f1;
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #27ae60;
+            box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.1);
+        }
+
+        .chat-send {
+            padding: 10px 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-send:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .chat-send:active {
+            transform: translateY(0);
+        }
+
+        .chat-suggest {
+            flex: 1;
+            padding: 10px 15px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-suggest:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .chatbot-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(39, 174, 96, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(39, 174, 96, 0.6);
+        }
+
+        /* Robot Visualization Section */
+        .robots-section {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .robots-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.02)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,144C960,149,1056,139,1152,144C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .robots-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .robots-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .robots-title h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .robots-title p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .robots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .robot-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .robot-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-10px);
+        }
+
+        .robot-figure {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .robot-card:nth-child(2) .robot-figure {
+            animation-delay: 0.3s;
+        }
+
+        .robot-card:nth-child(3) .robot-figure {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .robot-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .robot-status {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .robot-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .robot-stat {
+            text-align: center;
+        }
+
+        .robot-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .robot-stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* Delivery Animation */
+        .delivery-demo {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(39, 174, 96, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .delivery-path {
+            position: relative;
+            height: 150px;
+            margin: 30px 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(39, 174, 96, 0.1) 50%, transparent 100%);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .delivery-robot {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            font-size: 60px;
+            animation: deliver 4s ease-in-out infinite;
+        }
+
+        @keyframes deliver {
+            0% { left: 0%; }
+            50% { left: 90%; }
+            100% { left: 0%; }
+        }
+
+        .delivery-points {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .delivery-point {
+            font-size: 24px;
+        }
+
+        /* Robot Carousel Styles */
+        .robot-carousel {
+            margin-top: 40px;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-slide {
+            display: none;
+            position: relative;
+            width: 100%;
+            animation: fade 1s ease-in-out;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            padding: 40px 30px 30px;
+            text-align: center;
+        }
+
+        .carousel-caption h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .carousel-caption p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .carousel-slide.fade {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0.4; }
+            to { opacity: 1; }
+        }
+
+        .carousel-prev, .carousel-next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -30px;
+            padding: 16px 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+            background-color: rgba(0, 0, 0, 0.5);
+            user-select: none;
+            z-index: 10;
+        }
+
+        .carousel-next {
+            right: 0;
+        }
+
+        .carousel-prev {
+            left: 0;
+        }
+
+        .carousel-prev:hover, .carousel-next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .carousel-indicators {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 8px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .dot.active, .dot:hover {
+            background-color: white;
+            transform: scale(1.2);
+        }
+
+        /* Robot Functions Showcase */
+        .robot-functions-section {
+            background: white;
+            padding: 80px 20px;
+            position: relative;
+        }
+
+        .functions-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .functions-title h2 {
+            font-size: 42px;
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .functions-title p {
+            font-size: 18px;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .robot-functions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .robot-function-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ecf0f1 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .robot-function-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: #27ae60;
+        }
+
+        .robot-image-container {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .robot-image-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .robot-image-container::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 200px;
+            height: 200px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 50%;
+        }
+
+        .robot-illustration {
+            font-size: 120px;
+            z-index: 2;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .robot-function-card:nth-child(2) .robot-illustration {
+            animation-delay: 0.3s;
+        }
+
+        .robot-function-card:nth-child(3) .robot-illustration {
+            animation-delay: 0.6s;
+        }
+
+        .robot-function-card:nth-child(4) .robot-illustration {
+            animation-delay: 0.9s;
+        }
+
+        .robot-info {
+            padding: 30px;
+        }
+
+        .robot-function-type {
+            background: #27ae60;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .robot-function-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .robot-function-desc {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .robot-capabilities {
+            border-top: 2px solid #ecf0f1;
+            padding-top: 20px;
+        }
+
+        .capability-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .capability-icon {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .robot-specs {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .spec-label {
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        .spec-value {
+            color: #27ae60;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🍽️ Smart Restaurant</div>
+            <div class="header-nav">
+                <a onclick="scrollToSection('features')">Features</a>
+                <a onclick="scrollToSection('how')">How It Works</a>
+                <a onclick="openTrackModal()">Track Order</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <span class="hero-icon">🤖🍽️</span>
+            <img src="assets/Main roboimg.jpeg" alt="Robot serving customers" class="robot-img">
+            <h1>Experience Smart Dining</h1>
+            <p>Order delicious meals, track in real-time, and watch our robots deliver to your table</p>
+            <div class="hero-buttons">
+                <button class="hero-btn hero-btn-primary" onclick="startOrdering()">
+                    Start Ordering Now
+                </button>
+                <button class="hero-btn hero-btn-secondary" onclick="openTrackModal()">
+                    Track Your Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section" id="features">
+        <div class="section-title">
+            <h2>Why Choose Us?</h2>
+            <p>Experience the future of restaurant dining with our innovative system</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3>Lightning Fast</h3>
+                <p>Place your order in seconds and have it prepared fresh for you</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🤖</span>
+                <h3>Robot Delivery</h3>
+                <p>Advanced robots deliver your meal directly to your table with precision</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">📱</span>
+                <h3>Real-Time Tracking</h3>
+                <p>Track your order status and robot location in real-time</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🎁</span>
+                <h3>Loyalty Rewards</h3>
+                <p>Earn points with every purchase and redeem for exclusive discounts</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">⭐</span>
+                <h3>Quality Assured</h3>
+                <p>Leave reviews and ratings to help us serve you better</p>
+            </div>
+
+            <div class="feature-card">
+                <span class="feature-icon">🔒</span>
+                <h3>Secure Payments</h3>
+                <p>Multiple payment options including M-Pesa, Cash, and Bank Transfer</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="how-it-works" id="how">
+        <div class="section-title">
+            <h2>How It Works</h2>
+            <p>Simple steps to enjoy amazing food</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h4>Browse Menu</h4>
+                <p>Explore our delicious menu with mouth-watering photos</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <h4>Place Order</h4>
+                <p>Select items and add to cart, then checkout</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <h4>Track Live</h4>
+                <p>Watch your order being prepared and delivery status</p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <h4>Enjoy & Rate</h4>
+                <p>Receive your meal and leave a review</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-number">5000+</div>
+                <div class="stat-label">Orders Delivered</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Active Robots</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number">4.8★</div>
+                <div class="stat-label">Average Rating</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Service Available</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROBOT FUNCTIONS SHOWCASE SECTION -->
+    <section class="robot-functions-section" id="robot-functions">
+        <div class="functions-title">
+            <h2>🤖 Advanced Robot Functions</h2>
+            <p>Our smart robots are equipped with cutting-edge technology to handle various hotel and restaurant tasks</p>
+        </div>
+
+        <div class="robot-functions-grid">
+            <!-- Food Delivery Robot -->
+            <div class="robot-function-card">
+                <div class="robot-image-container">
+                    <div class="robot-illustration">🤖</div>
+                </div>
+                <div class="robot-info">
+                    <div class="robot-function-type">🍽️ Delivery Robot</div>
+                    <div class="robot-function-name">Meal Delivery Unit</div>
+                    <div class="robot-function-desc">
+                        Autonomous food delivery robot designed to transport meals from kitchen to tables with precision and care.
+                    </div>
+                    <div class="robot-capabilities">
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Handles hot and cold plates safely</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Real-time route optimization</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Collision avoidance sensors</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Silent operation (≤50dB)</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Handles multiple orders simultaneously</span>
+                        </div>
+                    </div>
+                    <div class="robot-specs">
+                        <div class="spec-row">
+                            <span class="spec-label">Speed:</span>
+                            <span class="spec-value">1.5 m/s</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Capacity:</span>
+                            <span class="spec-value">20 kg load</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Battery:</span>
+                            <span class="spec-value">12 hours</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Clearing Robot -->
+            <div class="robot-function-card">
+                <div class="robot-image-container">
+                    <div class="robot-illustration">🤖</div>
+                </div>
+                <div class="robot-info">
+                    <div class="robot-function-type">🧹 Cleaning Robot</div>
+                    <div class="robot-function-name">Table Clearing Unit</div>
+                    <div class="robot-function-desc">
+                        Smart cleaning robot that efficiently clears tables, washes dishes, and maintains restaurant hygiene standards.
+                    </div>
+                    <div class="robot-capabilities">
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Gentle handling of dishes</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Spill detection and cleanup</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Automated table sanitization</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Integrated water recycling system</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Eco-friendly cleaning agents</span>
+                        </div>
+                    </div>
+                    <div class="robot-specs">
+                        <div class="spec-row">
+                            <span class="spec-label">Speed:</span>
+                            <span class="spec-value">1.2 m/s</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Capacity:</span>
+                            <span class="spec-value">15 dishes</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Battery:</span>
+                            <span class="spec-value">10 hours</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guest Assistance Robot -->
+            <div class="robot-function-card">
+                <div class="robot-image-container">
+                    <div class="robot-illustration">🤖</div>
+                </div>
+                <div class="robot-info">
+                    <div class="robot-function-type">👤 Service Robot</div>
+                    <div class="robot-function-name">Guest Assistance Unit</div>
+                    <div class="robot-function-desc">
+                        Interactive robot that greets guests, provides information, and assists with special requests and recommendations.
+                    </div>
+                    <div class="robot-capabilities">
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Voice recognition (15 languages)</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Menu recommendations AI</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Guest preference learning</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Call staff assistance instantly</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Display restaurant info & specials</span>
+                        </div>
+                    </div>
+                    <div class="robot-specs">
+                        <div class="spec-row">
+                            <span class="spec-label">Speed:</span>
+                            <span class="spec-value">1.0 m/s</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Screen:</span>
+                            <span class="spec-value">10" Display</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Battery:</span>
+                            <span class="spec-value">14 hours</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floor Cleaning Robot -->
+            <div class="robot-function-card">
+                <div class="robot-image-container">
+                    <div class="robot-illustration">🤖</div>
+                </div>
+                <div class="robot-info">
+                    <div class="robot-function-type">🧽 Maintenance Robot</div>
+                    <div class="robot-function-name">Floor Cleaning Unit</div>
+                    <div class="robot-function-desc">
+                        Autonomous floor cleaning robot that maintains pristine restaurant and hotel floors throughout operating hours.
+                    </div>
+                    <div class="robot-capabilities">
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>HEPA filtration system</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Smart pathfinding algorithm</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Wet and dry cleaning modes</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Obstacle and fall detection</span>
+                        </div>
+                        <div class="capability-item">
+                            <span class="capability-icon">✓</span>
+                            <span>Automatic docking and charging</span>
+                        </div>
+                    </div>
+                    <div class="robot-specs">
+                        <div class="spec-row">
+                            <span class="spec-label">Speed:</span>
+                            <span class="spec-value">0.8 m/s</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Coverage:</span>
+                            <span class="spec-value">2000 m²/hr</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">Battery:</span>
+                            <span class="spec-value">8 hours</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROBOT VISUALIZATION SECTION -->
+    <section class="robots-section" id="robots-demo">
+        <div class="robots-content">
+            <div class="robots-title">
+                <h2>Meet Our Robot Fleet</h2>
+                <p>Experience cutting-edge robotics delivering your meals with precision and speed</p>
+            </div>
+
+            <!-- Robot Fleet Image Carousel -->
+            <div class="robot-carousel">
+                <div class="carousel-container">
+                    <div class="carousel-slide fade">
+                        <img src="assets/Roboimg 1.jpg" alt="Robot serving customers" class="Robot img 1">
+                        <div class="carousel-caption">
+                            <h3>ROBOT-001: Robotic Waiter</h3>
+                            <p>Futuristic robotic waiter serving meals with precision and hospitality</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-slide fade">
+                        <img src="assets/Roboimg 2.jpg" alt="Robot serving customers" class="Robot img ">
+                        <div class="carousel-caption">
+                            <h3>ROBOT-002: AI Bartender Bot</h3>
+                            <p>Intelligent AI-powered bartender preparing drinks and beverages</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-slide fade">
+                        <img src="assets/Roboimg 3.jpg" alt="Robot serving customers" class="Robot img ">
+                        <div class="carousel-caption">
+                            <h3>ROBOT-003: Food Delivery Robot</h3>
+                            <p>Autonomous delivery robot transporting meals throughout the restaurant</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-slide fade">
+                        <img src="assets/Roboimg 4.jpg" alt="Robot serving customers" class="Robot img ">
+                        <div class="carousel-caption">
+                            <h3>ROBOT-004: Smart Host Bot</h3>
+                            <p>Intelligent hospitality robot welcoming guests and managing reservations</p>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Arrows -->
+                    <a class="carousel-prev" onclick="changeSlide(-1)">&#10094;</a>
+                    <a class="carousel-next" onclick="changeSlide(1)">&#10095;</a>
+                </div>
+
+                <!-- Carousel Indicators/Dots -->
+                <div class="carousel-indicators">
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                    <span class="dot" onclick="currentSlide(3)"></span>
+                    <span class="dot" onclick="currentSlide(4)"></span>
+                </div>
+
+                <!-- Auto-play Info -->
+                <p style="text-align: center; margin-top: 20px; opacity: 0.8; font-size: 14px;">Auto-rotating slideshow • Click arrows or dots to navigate</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <div class="cta-box">
+            <h2>Ready to Order?</h2>
+            <p>Join thousands of satisfied customers enjoying seamless dining</p>
+            <button class="cta-button" onclick="startOrdering()">Start Your Order</button>
+        </div>
+    </div>
+
+    <!-- Track Order Modal -->
+    <div id="trackModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Track Your Order</span>
+                <span class="close" onclick="closeTrackModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="info-text">
+                    Enter your table number or phone number to track your order
+                </div>
+                <input 
+                    type="text" 
+                    class="modal-input" 
+                    id="trackInput" 
+                    placeholder="Enter table number (e.g., T001)"
+                >
+                <button class="modal-button" onclick="handleTrack()">Track Order</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // COMPREHENSIVE CHATBOT FUNCTIONALITY
+        // ============================================
+        const chatbot = {
+            isOpen: false,
+            
+            // Knowledge base for different query types
+            responses: {
+                wifi: {
+                    keywords: ['wifi', 'password', 'internet', 'network', 'connect'],
+                    responses: [
+                        '📶 WiFi Password: SmartRestaurant2024\nNetwork: SmartRestaurant_Guest\nSpeed: 100 Mbps',
+                        '🔐 Our WiFi: SmartRestaurant_Guest\n🔑 Password: SmartRestaurant2024',
+                        'WiFi available! Network: SmartRestaurant_Guest | Password: SmartRestaurant2024'
+                    ]
+                },
+                hours: {
+                    keywords: ['hours', 'open', 'close', 'timing', 'when'],
+                    responses: [
+                        '⏰ Restaurant Hours:\n📅 Mon-Thu: 10:00 AM - 11:00 PM\n📅 Fri-Sat: 10:00 AM - 1:00 AM\n📅 Sunday: 12:00 PM - 10:00 PM',
+                        'We\'re open 10 AM - 11 PM daily (Fri-Sat until 1 AM) 🕐',
+                        '⏳ Opening hours: 10 AM - 11 PM | Extended hours Fri-Sat until 1 AM'
+                    ]
+                },
+                phone: {
+                    keywords: ['phone', 'contact', 'call', 'number', 'reach'],
+                    responses: [
+                        '📞 Call us at: +254 700 123 456\n📧 Email: info@smartrestaurant.com\n💬 WhatsApp: +254 700 123 456',
+                        'Contact us: 📱 +254 700 123 456 | 📧 info@smartrestaurant.com',
+                        'Phone: +254 700 123 456 (WhatsApp available too!)'
+                    ]
+                },
+                delivery: {
+                    keywords: ['delivery', 'robot', 'how long', 'time', 'arrive', 'arrive time'],
+                    responses: [
+                        '🤖 Our robots deliver in 15-20 minutes average!\n⚡ Real-time tracking available\n✨ Contactless delivery',
+                        '⏱️ Average delivery time: 15-20 minutes\n🤖 Tracked by our smart robots in real-time!',
+                        'Delivery time: 15-20 mins with live robot tracking 🤖'
+                    ]
+                },
+                payment: {
+                    keywords: ['payment', 'pay', 'mpesa', 'cash', 'card', 'accept'],
+                    responses: [
+                        '💳 Payment Options:\n📱 M-Pesa (Most Popular)\n💰 Cash on Delivery\n🏦 Bank Transfer\n💳 Debit/Credit Card',
+                        'We accept: M-Pesa 📱 | Cash 💰 | Bank Transfer 🏦 | Cards 💳',
+                        'Payment methods: M-Pesa, Cash, Bank Transfer, Credit/Debit Cards'
+                    ]
+                },
+                food: {
+                    keywords: ['menu', 'food', 'eat', 'dish', 'recommend', 'vegetarian', 'vegan'],
+                    responses: [
+                        '🍽️ Check our full menu in the app!\n⭐ Popular: Nyama Choma, Ugali, Grilled Fish\n🌱 Vegetarian options available',
+                        'Browse our menu to see all options! Popular dishes: Nyama Choma, Fish, Ugali 🍽️',
+                        'Our menu has everything! From Nyama Choma to veggie options - see app for details'
+                    ]
+                },
+                promo: {
+                    keywords: ['promo', 'discount', 'offer', 'deal', 'special', 'coupon'],
+                    responses: [
+                        '🎉 Current Offers:\n50% off first order (NEW users)\n🤖 Free delivery on orders >KES 500\n👥 Referral bonus: KES 200 per friend',
+                        '✨ Special offer: 50% off first order!\n🚚 Free delivery on orders above KES 500',
+                        'Active promos: 50% first order discount | Free delivery >KES 500 🎁'
+                    ]
+                },
+                location: {
+                    keywords: ['location', 'address', 'where', 'find us'],
+                    responses: [
+                        '📍 Location: 123 Restaurant Avenue, Nairobi\n🗺️ Near Westgate Mall\n🅿️ Parking available',
+                        'We\'re at: 123 Restaurant Avenue, Nairobi 📍 (Near Westgate Mall)',
+                        'Find us at: 123 Restaurant Avenue, Nairobi - Easy parking available! 🅿️'
+                    ]
+                }
+            },
+            
+            open() {
+                document.getElementById('chatbotWidget').classList.add('open');
+                this.isOpen = true;
+                this.addMessage('bot', 'Hello! 👋 Welcome to Smart Restaurant.\n\nI can help with:\n🍽️ Menu & Food\n🤖 Robot Delivery\n💳 Payments\n📞 Contact Info\n⏰ Hours\n📶 WiFi\n\nWhat can I help you with?');
+            },
+            
+            close() {
+                document.getElementById('chatbotWidget').classList.remove('open');
+                this.isOpen = false;
+            },
+            
+            addMessage(role, text) {
+                const chatMessages = document.getElementById('chatMessages');
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `chat-message ${role}`;
+                msgDiv.innerHTML = `<span>${text}</span>`;
+                chatMessages.appendChild(msgDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            },
+            
+            getRandomResponse(arr) {
+                return arr[Math.floor(Math.random() * arr.length)];
+            },
+            
+            processQuery(userMessage) {
+                const query = userMessage.toLowerCase().trim();
+                
+                // Check each response category
+                for (const [category, data] of Object.entries(this.responses)) {
+                    for (const keyword of data.keywords) {
+                        if (query.includes(keyword)) {
+                            return this.getRandomResponse(data.responses);
+                        }
+                    }
+                }
+                
+                // Default responses for common greetings
+                if (query === 'hi' || query === 'hello' || query === 'hey') {
+                    return 'Hey there! 👋 How can I help you today?';
+                }
+                if (query === 'thanks' || query === 'thank you' || query === 'tq') {
+                    return 'You\'re welcome! 😊 Anything else I can help with?';
+                }
+                if (query === 'help' || query === '?') {
+                    return 'I can help with:\n🍽️ Menu Info\n🤖 Delivery Details\n💳 Payment Methods\n📞 Contact Us\n⏰ Restaurant Hours\n📶 WiFi Password\n\nJust ask!';
+                }
+                
+                // Fallback response
+                return '🤔 I\'m not sure about that. Try asking about:\n🍽️ Food & Menu\n🤖 Robot Delivery\n💳 Payments\n📞 Contact\n⏰ Hours\n📶 WiFi\n\nOr type "help" 😊';
+            },
+            
+            handleMessage() {
+                const input = document.getElementById('chatInput');
+                const userMessage = input.value.trim();
+                
+                if (!userMessage) return;
+                
+                // Add user message
+                this.addMessage('user', userMessage);
+                input.value = '';
+                
+                // Simulate bot thinking
+                setTimeout(() => {
+                    const botResponse = this.processQuery(userMessage);
+                    this.addMessage('bot', botResponse);
+                }, 500);
+            },
+            
+            suggestFood() {
+                const hour = new Date().getHours();
+                let suggestion = '';
+                
+                if (hour >= 5 && hour < 11) {
+                    suggestion = '☀️ Breakfast Special!\n🥞 Mandazi (KES 50)\n☕ Chai (KES 50)\n🍳 Eggs & Bread (KES 100)';
+                } else if (hour >= 11 && hour < 13) {
+                    suggestion = '🍽️ Lunch Specials!\n🍖 Nyama Choma (KES 450)\n🌾 Ugali with Sukuma Wiki (KES 150)\n🍗 Chicken Stew (KES 350)';
+                } else if (hour >= 13 && hour < 17) {
+                    suggestion = '🍪 Afternoon Snacks!\n🥟 Samosa (KES 60)\n☕ Coffee (KES 80)\n🧁 Pastry (KES 100)';
+                } else {
+                    suggestion = '🌙 Dinner Specials!\n🐟 Grilled Fish (KES 550)\n🍖 Nyama Choma (KES 450)\n🍝 Pasta (KES 300)';
+                }
+                
+                this.addMessage('bot', suggestion);
+            }
+        };
+
+        // Carousel/Slideshow Functions
+        let currentSlideIndex = 1;
+        let slideTimer;
+
+        function changeSlide(n) {
+            clearTimeout(slideTimer);
+            showSlide(currentSlideIndex += n);
+            startAutoSlide();
+        }
+
+        function currentSlide(n) {
+            clearTimeout(slideTimer);
+            showSlide(currentSlideIndex = n);
+            startAutoSlide();
+        }
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.dot');
+            
+            if (n > slides.length) { currentSlideIndex = 1; }
+            if (n < 1) { currentSlideIndex = slides.length; }
+            
+            slides.forEach(slide => slide.classList.remove('fade'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (slides[currentSlideIndex - 1]) {
+                slides[currentSlideIndex - 1].classList.add('fade');
+            }
+            if (dots[currentSlideIndex - 1]) {
+                dots[currentSlideIndex - 1].classList.add('active');
+            }
+        }
+
+        function startAutoSlide() {
+            slideTimer = setTimeout(() => {
+                currentSlideIndex++;
+                showSlide(currentSlideIndex);
+                startAutoSlide();
+            }, 5000);
+        }
+
+        // Initialize carousel when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            showSlide(currentSlideIndex);
+            startAutoSlide();
+        });
+
+        function startOrdering() {
+            const tableId = prompt('Enter your table number (e.g., T001):', 'T001');
+            if (tableId) {
+                window.location.href = 'table-monitor.html?table=' + encodeURIComponent(tableId);
+            }
+        }
+
+        function openTrackModal() {
+            document.getElementById('trackModal').style.display = 'block';
+            document.getElementById('trackInput').focus();
+        }
+
+        function closeTrackModal() {
+            document.getElementById('trackModal').style.display = 'none';
+        }
+
+        function handleTrack() {
+            const trackInput = document.getElementById('trackInput').value.trim();
+            if (!trackInput) {
+                alert('Please enter a table number or phone number');
+                return;
+            }
+            window.location.href = 'table-monitor.html?track=' + encodeURIComponent(trackInput);
+        }
+
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('trackModal').style.display === 'block') {
+                handleTrack();
+            }
+        });
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('trackModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+    
+    <!-- CHATBOT WIDGET -->
+    <div id="chatbotWidget" class="chatbot-widget">
+        <div class="chatbot-header">
+            <h4>🤖 Smart Assistant</h4>
+            <button onclick="chatbot.close()">×</button>
+        </div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div class="chat-input-area">
+            <input 
+                type="text" 
+                id="chatInput" 
+                class="chat-input" 
+                placeholder="Ask me anything..."
+                onkeypress="if(event.key==='Enter') chatbot.handleMessage()"
+            >
+            <button onclick="chatbot.handleMessage()" class="chat-send">📤</button>
+            <button onclick="chatbot.suggestFood()" class="chat-suggest" title="Food Suggestion">💡</button>
+        </div>
+    </div>
+    
+    <button id="chatbotBtn" onclick="chatbot.open()" class="chatbot-btn">🤖 Chat</button>
+</body>
+</html>
