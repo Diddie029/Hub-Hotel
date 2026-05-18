@@ -1,6 +1,6 @@
 # 🤖 Smart Restaurant Automation System
 
-A full-stack smart restaurant management system that automates food ordering, table service, and delivery using robotics technology. The system is designed to improve efficiency, reduce human workload, and provide real-time order tracking and robot monitoring.
+A smart restaurant management system that automates food ordering, table service, and delivery using robotics technology. The system is designed to improve efficiency, reduce human workload, and provide real-time order tracking and robot monitoring.
 
 ---
 
