@@ -4,7 +4,7 @@ A smart restaurant management system that automates food ordering, table service
 
 ---
 
-## 🚀 Features
+## 🚀 Features and Functionalities
 
 ### 🍽️ Restaurant Operations
 - Digital menu ordering system
