@@ -6,24 +6,24 @@ A smart restaurant management system that automates food ordering, table service
 
 ##  Features and Functionalities
 
-### 🍽️ Restaurant Operations
+###  Restaurant Operations
 - Digital menu ordering system
 - Table-based order assignment
 - Automated order processing
 
-### 🤖 Robot Automation
+###  Robot Automation
 - Robot task assignment based on orders
 - Real-time robot status (Idle, Moving, Delivering)
 - Automatic movement control per active order
 - Smart queue management for multiple robots
 
-### 📡 Live Monitoring System
+### Live Monitoring System
 - Live robot tracking dashboard
 - Order status updates in real time
 - System health monitoring panel
 - Activity logs for all robot actions
 
-### 📊 Admin Dashboard
+### Administrator Dashboard
 - Manage tables and orders
 - Monitor robot performance
 - View system analytics
@@ -31,7 +31,7 @@ A smart restaurant management system that automates food ordering, table service
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack and Tools
 
 - **Frontend:** HTML, CSS, JavaScript (or React if used)
 - **Backend:** PHP
@@ -41,7 +41,7 @@ A smart restaurant management system that automates food ordering, table service
 
 ---
 
-## ⚙️ Installation Guide
+##  Installation Guide
 
 ### 1. Clone the repository
 ```bash
